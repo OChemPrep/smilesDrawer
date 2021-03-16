@@ -214,7 +214,8 @@
       let t = performance.now();
 
       SmilesDrawer.parse(input.value, function (tree) {
-        smilesDrawer.draw(tree, 'output-canvas', 'light', false);
+        smilesDrawer.layout(tree, false);
+        smilesDrawer.draw('output-canvas', 'light');
         let td = performance.now() - t;
         log.innerHTML = '&nbsp;';
         log.style.visibility = 'hidden';

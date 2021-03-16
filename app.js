@@ -48,7 +48,8 @@ SmilesDrawer.apply = function(options, selector='canvas[data-smiles]', themeName
       let element = elements[i];
 
       SmilesDrawer.parse(element.getAttribute('data-smiles'), function(tree) {
-          smilesDrawer.draw(tree, element, themeName, false);
+          smilesDrawer.layout(tree, false);
+          smilesDrawer.draw(element, themeName)
       }, function(err) {
         if (onError) {
           onError(err);

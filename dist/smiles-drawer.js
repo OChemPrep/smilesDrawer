@@ -47,7 +47,8 @@ SmilesDrawer.apply = function (options, selector = 'canvas[data-smiles]', themeN
   for (var i = 0; i < elements.length; i++) {
     let element = elements[i];
     SmilesDrawer.parse(element.getAttribute('data-smiles'), function (tree) {
-      smilesDrawer.draw(tree, element, themeName, false);
+      smilesDrawer.layout(tree, false);
+      smilesDrawer.draw(element, themeName);
     }, function (err) {
       if (onError) {
         onError(err);
@@ -2069,21 +2070,14 @@ class Drawer {
   }
 
   /**
-   * Draws the parsed smiles data to a canvas element.
+   * Lays out the parsed smiles data to a canvas element.
    *
    * @param {Object} data The tree returned by the smiles parser.
-   * @param {(String|HTMLElement)} target The id of the HTML canvas element the structure is drawn to - or the element itself.
-   * @param {String} themeName='dark' The name of the theme to use. Built-in themes are 'light' and 'dark'.
    * @param {Boolean} infoOnly=false Only output info on the molecule without drawing anything to the canvas.
    */
-  draw(data, target, themeName = 'light', infoOnly = false) {
+  layout(data, infoOnly = false) {
     this.data = data;
     this.infoOnly = infoOnly;
-
-    if (!this.infoOnly) {
-      this.canvasWrapper = new CanvasWrapper(target, this.opts.themes[themeName], this.opts);
-    }
-
     this.ringIdCounter = 0;
     this.ringConnectionIdCounter = 0;
     this.graph = new Graph(data, this.opts.isomeric);
@@ -2193,19 +2187,32 @@ class Drawer {
         this.initPseudoElements();
       }
 
-      this.rotateDrawing(); // Set the canvas to the appropriate size
-
-      this.canvasWrapper.scale(this.graph.vertices); // Do the actual drawing
-
-      this.drawEdges(this.opts.debug);
-      this.drawVertices(this.opts.debug);
-      this.canvasWrapper.reset();
+      this.rotateDrawing();
 
       if (this.opts.debug) {
         console.log(this.graph);
         console.log(this.rings);
         console.log(this.ringConnections);
       }
+    }
+  }
+  /**
+   * Draws the parsed smiles data to a canvas element.
+   *
+   * @param {(String|HTMLElement)} target The id of the HTML canvas element the structure is drawn to - or the element itself.
+   * @param {String} themeName='dark' The name of the theme to use. Built-in themes are 'light' and 'dark'.
+   */
+
+
+  draw(target, themeName = 'light') {
+    if (!this.infoOnly) {
+      this.canvasWrapper = new CanvasWrapper(target, this.opts.themes[themeName], this.opts); // Set the canvas to the appropriate size
+
+      this.canvasWrapper.scale(this.graph.vertices); // Do the actual drawing
+
+      this.drawEdges(this.opts.debug);
+      this.drawVertices(this.opts.debug);
+      this.canvasWrapper.reset();
     }
   }
   /**

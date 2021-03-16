@@ -97,7 +97,8 @@
                         container.appendChild(canvas);
                         
                         SmilesDrawer.parse(set[i], function(tree) {
-                            smilesDrawer.draw(tree, 'canvas' + i, 'light', false);
+                            smilesDrawer.layout(tree, false);
+                            smilesDrawer.draw('canvas' + i, 'light');
                         });
 
                         // if (td > 1000) console.log(schembl[i]);

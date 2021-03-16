@@ -34,7 +34,8 @@
                     document.body.appendChild(canvas);
 
                     SmilesDrawer.parse(drugbank[i], function(tree) {
-                        smilesDrawer.draw(tree, 'canvas' + i, 'light', false); 
+                        smilesDrawer.layout(tree, false);
+                        smilesDrawer.draw('canvas' + i, 'light'); 
                     }, function(err) {
                         console.log(err);
                     });

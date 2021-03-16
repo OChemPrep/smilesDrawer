@@ -30,7 +30,8 @@
                     
                     let t = performance.now();
                     SmilesDrawer.parse(force[i], function(tree) {
-                        smilesDrawer.draw(tree, 'canvas' + i, 'light', false);
+                        smilesDrawer.layout(tree, false);
+                        smilesDrawer.draw('canvas' + i, 'light');
                         let td = performance.now() -t;
                         let div = document.createElement('div');
                         div.innerHTML = td;

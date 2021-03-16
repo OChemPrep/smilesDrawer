@@ -74,7 +74,8 @@
                 SmilesDrawer.parse(set[i], function(tree) {
                     td = performance.now() - t;
                     t2 = performance.now();
-                    smilesDrawer.draw(tree, 'example-canvas', 'light', false);
+                    smilesDrawer.layout(tree, false);
+                    smilesDrawer.draw('example-canvas', 'light');
                     td2 = performance.now() - t2;
                 }, function(err) {
                     nErrors++;

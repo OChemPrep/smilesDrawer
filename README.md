@@ -82,7 +82,8 @@ In order to have nice consistent font rendering you have to include the droid sa
                 // Clean the input (remove unrecognized characters, such as spaces and tabs) and parse it
                 SmilesDrawer.parse(input.value, function(tree) {
                     // Draw to the canvas
-                    smilesDrawer.draw(tree, 'example-canvas', 'light', false);
+                    smilesDrawer.layout(tree,false);
+                    smilesDrawer.draw('example-canvas', 'light');
                 });
             });
         </script>
