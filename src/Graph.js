@@ -29,7 +29,9 @@ class Graph {
 
     // Used for the bridge detection algorithm
     this._time = 0;
-    this._init(parseTree);
+    if(parseTree) {
+      this._init(parseTree);
+    }
   }
 
   /**

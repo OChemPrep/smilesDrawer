@@ -4971,7 +4971,9 @@ class Graph {
 
     this._time = 0;
 
-    this._init(parseTree);
+    if (parseTree) {
+      this._init(parseTree);
+    }
   }
   /**
    * PRIVATE FUNCTION. Initializing the graph from the parse tree.
