@@ -215,6 +215,8 @@
 
       SmilesDrawer.parse(input.value, function (tree) {
         smilesDrawer.layout(tree, false);
+        // smilesDrawer.layout(tree, false, true);
+        // console.log(smilesDrawer.generatedSmilesOutput);
         smilesDrawer.draw('output-canvas', 'dark');
         let td = performance.now() - t;
         log.innerHTML = '&nbsp;';
