@@ -232,18 +232,18 @@
       let testString = "";
 
       while (curr) {
+        testString += curr.atom;
+        if (curr.ringbonds && curr.ringbonds.length > 0) {
+          curr.ringbonds.forEach(value => {
+            testString += value.id;
+          });
+        }
+
         if (curr.branches && curr.branches.length > 0) {
           curr.branches.forEach(value => {
             console.log(value);
             let indy = hammer(value);
             testString += "(" + indy +")";
-          });
-        }
-
-        testString += curr.atom;
-        if (curr.ringbonds && curr.ringbonds.length > 0) {
-          curr.ringbonds.forEach(value => {
-            testString += value.id;
           });
         }
         curr = curr.next;
