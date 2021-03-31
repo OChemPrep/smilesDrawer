@@ -179,6 +179,8 @@ class Drawer {
         this.initHydrogens();
         //end of initdraw
 
+        console.log("textonly? " + this.textOnly);
+
         if (this.textOnly) {
             //beginning of processGraph
             this.position();
@@ -196,16 +198,21 @@ class Drawer {
             this.generatedSmilesOutput = "";
 
             for (var o = 0; o < this.opts.overlapResolutionIterations; o++) {
+                console.log("iteration " + o);
                 for (var i = 0; i < this.graph.edges.length; i++) {
+                    console.log("edge " + i);
+
                     let edge = this.graph.edges[i];
 
-                    // Custom code
-                    let vA = this.graph.vertices[edge.sourceId].value.element;
-                    let vB = this.graph.vertices[edge.targetId].value.element;
+                    // // Custom code
+                    // let vA = this.graph.vertices[edge.sourceId].value.element;
+                    // let vB = this.graph.vertices[edge.targetId].value.element;
+                    //
+                    // this.generatedSmilesOutput += "(" + vA + vB + ")";
 
-                    this.generatedSmilesOutput += "(" + vA + vB + ")";
-
+                    console.log("rotatable?");
                     if (this.isEdgeRotatable(edge)) {
+                        console.log("rotatable");
                         let subTreeDepthA = this.graph.getTreeDepth(edge.sourceId, edge.targetId);
                         let subTreeDepthB = this.graph.getTreeDepth(edge.targetId, edge.sourceId);
 
@@ -224,15 +231,21 @@ class Drawer {
                             let vertexB = this.graph.vertices[b];
                             let neighboursB = vertexB.getNeighbours(a);
 
+                            console.log("neigh" + neighboursB.length);
+
                             if (neighboursB.length === 1) {
                                 let neighbour = this.graph.vertices[neighboursB[0]];
+                                console.log("rotate 6");
                                 let angle = neighbour.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
+                                console.log("angle " + angle);
 
+                                console.log("rotate 7");
                                 this.rotateSubtree(neighbour.id, vertexB.id, angle, vertexB.position);
                                 // If the new overlap is bigger, undo change
                                 let newTotalOverlapScore = this.getOverlapScore().total;
 
                                 if (newTotalOverlapScore > this.totalOverlapScore) {
+                                    console.log("rotate 8");
                                     this.rotateSubtree(neighbour.id, vertexB.id, -angle, vertexB.position);
                                 } else {
                                     this.totalOverlapScore = newTotalOverlapScore;
@@ -256,16 +269,24 @@ class Drawer {
                                 } else if (neighbourA.value.rings.length !== 0 || neighbourB.value.rings.length !== 0) {
                                     continue;
                                 } else {
+                                    console.log("rotate 9");
                                     let angleA = neighbourA.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
+                                    console.log("rotate 10");
                                     let angleB = neighbourB.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
+                                    console.log("angleA " + angleA);
+                                    console.log("angleB " + angleB);
 
+                                    console.log("rotate 11");
                                     this.rotateSubtree(neighbourA.id, vertexB.id, angleA, vertexB.position);
+                                    console.log("rotate 12");
                                     this.rotateSubtree(neighbourB.id, vertexB.id, angleB, vertexB.position);
 
                                     let newTotalOverlapScore = this.getOverlapScore().total;
 
                                     if (newTotalOverlapScore > this.totalOverlapScore) {
+                                        console.log("rotate 13");
                                         this.rotateSubtree(neighbourA.id, vertexB.id, -angleA, vertexB.position);
+                                        console.log("rotate 14");
                                         this.rotateSubtree(neighbourB.id, vertexB.id, -angleB, vertexB.position);
                                     } else {
                                         this.totalOverlapScore = newTotalOverlapScore;
@@ -290,6 +311,7 @@ class Drawer {
                 this.initPseudoElements();
             }
 
+            console.log("rotate 16");
             this.rotateDrawing();
 
             if (this.opts.debug) {
@@ -336,13 +358,16 @@ class Drawer {
 
                             if (neighboursB.length === 1) {
                                 let neighbour = this.graph.vertices[neighboursB[0]];
+                                console.log("rotate 17");
                                 let angle = neighbour.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
 
+                                console.log("rotate 18");
                                 this.rotateSubtree(neighbour.id, vertexB.id, angle, vertexB.position);
                                 // If the new overlap is bigger, undo change
                                 let newTotalOverlapScore = this.getOverlapScore().total;
 
                                 if (newTotalOverlapScore > this.totalOverlapScore) {
+                                    console.log("rotate 19");
                                     this.rotateSubtree(neighbour.id, vertexB.id, -angle, vertexB.position);
                                 } else {
                                     this.totalOverlapScore = newTotalOverlapScore;
@@ -366,16 +391,23 @@ class Drawer {
                                 } else if (neighbourA.value.rings.length !== 0 || neighbourB.value.rings.length !== 0) {
                                     continue;
                                 } else {
+                                    console.log("rotate 20");
                                     let angleA = neighbourA.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
+                                    console.log("rotate 21");
                                     let angleB = neighbourB.position.getRotateAwayFromAngle(vertexA.position, vertexB.position, MathHelper.toRad(120));
 
+                                    console.log("rotate 22");
                                     this.rotateSubtree(neighbourA.id, vertexB.id, angleA, vertexB.position);
+
+                                    console.log("rotate 23");
                                     this.rotateSubtree(neighbourB.id, vertexB.id, angleB, vertexB.position);
 
                                     let newTotalOverlapScore = this.getOverlapScore().total;
 
                                     if (newTotalOverlapScore > this.totalOverlapScore) {
+                                        console.log("rotate 24");
                                         this.rotateSubtree(neighbourA.id, vertexB.id, -angleA, vertexB.position);
+                                        console.log("rotate 25");
                                         this.rotateSubtree(neighbourB.id, vertexB.id, -angleB, vertexB.position);
                                     } else {
                                         this.totalOverlapScore = newTotalOverlapScore;
@@ -400,6 +432,7 @@ class Drawer {
                 this.initPseudoElements();
             }
 
+            console.log("rotate 26");
             this.rotateDrawing();
 
             if (this.opts.debug) {
@@ -570,10 +603,12 @@ class Drawer {
                     continue;
                 }
 
+                console.log("rotate 27");
                 this.graph.vertices[i].position.rotateAround(angle, this.graph.vertices[b].position);
             }
 
             for (var i = 0; i < this.rings.length; i++) {
+                console.log("rotate 28");
                 this.rings[i].center.rotateAround(angle, this.graph.vertices[b].position);
             }
         }
@@ -1989,12 +2024,15 @@ class Drawer {
      * @param {Vector2} center The rotational center.
      */
     rotateSubtree(vertexId, parentVertexId, angle, center) {
+        console.log("rotate subtree");
         let that = this;
 
         this.graph.traverseTree(vertexId, parentVertexId, function (vertex) {
+            console.log("tree traversed");
             vertex.position.rotateAround(angle, center);
 
             for (var i = 0; i < vertex.value.anchoredRings.length; i++) {
+                console.log("rings layed out");
                 let ring = that.rings[vertex.value.anchoredRings[i]];
 
                 if (ring) {
@@ -2096,7 +2134,9 @@ class Drawer {
 
         // Looking for overlaps created by two bonds coming out of a ring atom, which both point straight
         // away from the ring and are thus perfectly overlapping.
+        console.log("primary overlaps");
         for (var i = 0; i < this.rings.length; i++) {
+            console.log("primary overlap " + i);
             let ring = this.rings[i];
 
             for (var j = 0; j < ring.members.length; j++) {
@@ -2142,6 +2182,7 @@ class Drawer {
         }
 
         for (var i = 0; i < overlaps.length; i++) {
+            console.log("other overlap " + i);
             let overlap = overlaps[i];
 
             if (overlap.vertices.length === 2) {
@@ -2191,7 +2232,9 @@ class Drawer {
      * @param {Number} scores[].score The overlap score associated with the vertex id.
      */
     resolveSecondaryOverlaps(scores) {
+        console.log("second overlaps?");
         for (var i = 0; i < scores.length; i++) {
+            console.log("second oerlap " + i);
             if (scores[i].score > this.opts.overlapSensitivity) {
                 let vertex = this.graph.vertices[scores[i].id];
 
@@ -2211,7 +2254,8 @@ class Drawer {
 
                         let vertexPreviousPosition = vertex.id === 0 ? this.graph.vertices[1].position : vertex.previousPosition;
 
-                        vertex.position.rotateAwayFrom(closestPosition, vertexPreviousPosition, MathHelper.toRad(20));
+                        console.log("rotate");
+                        vertex.position.rotateAwayFrom(closestPosition, vertexPreviousPosition, MathHelper.toRad(30));
                     }
                 }
             }
@@ -2285,7 +2329,8 @@ class Drawer {
                 // and rotate it by 90°
 
                 let dummy = new Vector2(this.opts.bondLength, 0);
-                dummy.rotate(MathHelper.toRad(-60));
+                console.log("rotate 1 - initial rotation");
+                dummy.rotate(MathHelper.toRad(-90));
 
                 vertex.previousPosition = dummy;
                 vertex.setPosition(this.opts.bondLength, 0);
@@ -2321,6 +2366,7 @@ class Drawer {
 
                     pos.invert().normalize().multiplyScalar(this.opts.bondLength).add(previousVertex.position);
                 } else {
+                    console.log("rotate 2");
                     pos = joinedVertex.position.clone().rotateAround(Math.PI, previousVertex.position);
                 }
 
@@ -2332,6 +2378,7 @@ class Drawer {
                 // on the global angle of the previous bond
                 let v = new Vector2(this.opts.bondLength, 0);
 
+                console.log("rotate 3");
                 v.rotate(angle);
                 v.add(previousVertex.position);
 
@@ -2427,7 +2474,9 @@ class Drawer {
                     let proposedVectorA = new Vector2(this.opts.bondLength, 0);
                     let proposedVectorB = new Vector2(this.opts.bondLength, 0);
 
+                    console.log("rotate 4");
                     proposedVectorA.rotate(proposedAngleA).add(vertex.position);
+                    console.log("rotate 5");
                     proposedVectorB.rotate(proposedAngleB).add(vertex.position);
 
                     // let centerOfMass = this.getCurrentCenterOfMassInNeigbourhood(vertex.position, 100);

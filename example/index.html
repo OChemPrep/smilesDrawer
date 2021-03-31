@@ -67,8 +67,8 @@
 
     .logo {
       display: none;
-      width: 1.3em; 
-      height: 1.3em; 
+      width: 1.3em;
+      height: 1.3em;
     }
 
     input[type=text] {
@@ -145,9 +145,26 @@
     <div id="log">&nbsp;</div>
   </div>
 
-  <div class="canvas-container">
-    <canvas id="output-canvas" width="500" height="500"></canvas>
-  </div>
+  <table>
+    <tbody>
+      <tr>
+        <td><p style="color: white">Before</p></td>
+        <td><p id="after-text" style="color: white">After</p></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="canvas-container">
+            <canvas id="output-canvas" width="500" height="500"></canvas>
+          </div>
+        </td>
+        <td>
+          <div class="canvas-container">
+            <canvas id="output-canvas-after" width="500" height="500"></canvas>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <div class="settings-container">
     <table>
@@ -210,14 +227,55 @@
     var input = document.getElementById('input');
     var log = document.getElementById('log');
 
+    function hammer(tree) {
+      let curr = tree;
+      let testString = "";
+
+      while (curr) {
+        if (curr.branches && curr.branches.length > 0) {
+          curr.branches.forEach(value => {
+            console.log(value);
+            let indy = hammer(value);
+            testString += "(" + indy +")";
+          });
+        }
+
+        testString += curr.atom;
+        if (curr.ringbonds && curr.ringbonds.length > 0) {
+          curr.ringbonds.forEach(value => {
+            testString += value.id;
+          });
+        }
+        curr = curr.next;
+      }
+
+      return testString;
+    }
+
     function draw() {
       let t = performance.now();
 
+      console.log("drawing " + input.value);
+
       SmilesDrawer.parse(input.value, function (tree) {
-        smilesDrawer.layout(tree, false);
-        // smilesDrawer.layout(tree, false, true);
-        // console.log(smilesDrawer.generatedSmilesOutput);
+        console.log(tree);
+
+        let treeGeneratedSmiles = hammer(tree);
+
+        console.log("parsed and written " + treeGeneratedSmiles);
+
+        smilesDrawer.layout(tree, false, true);
+        console.log(smilesDrawer.generatedSmilesOutput);
         smilesDrawer.draw('output-canvas', 'dark');
+
+        let parsedOutputTextView = document.getElementById('after-text');
+        parsedOutputTextView.innerHTML = treeGeneratedSmiles;
+
+        SmilesDrawer.parse(treeGeneratedSmiles, function (after_tree) {
+          smilesDrawer.layout(after_tree, false, true);
+          smilesDrawer.draw('output-canvas-after', 'dark');
+        });
+
         let td = performance.now() - t;
         log.innerHTML = '&nbsp;';
         log.style.visibility = 'hidden';
@@ -237,7 +295,7 @@
         log.innerHTML = err;
         log.style.visibility = 'visible';
         console.log(err);
-      });      
+      });
     }
 
     function updateOptions() {
